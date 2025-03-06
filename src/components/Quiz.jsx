@@ -1,4 +1,5 @@
 import questions from '../questions.js';
+import Results from './Results';
 import { useState, useRef, useEffect } from 'react';
 
 function Quiz() {
@@ -32,16 +33,20 @@ function Quiz() {
     setUserAnswer(e.target.value);
   }
 
-const handleSubmit = () => {  
+const handleSubmit = () => {
   answersSelected.current.map( (answer, index) => {
     console.log(`Question ${index + 1}: ${answer}`);
     return answer;    
   })
+  setIsFinished(true); 
+}
+
+const handleReset = () => {
   setShuffleAnswers(true);
   setCurrentQuestion(0);
   setUserAnswer([]);
   answersSelected.current = [];
-  setIsFinished(true);
+  setIsFinished(false);
 }
   
   return (
@@ -77,7 +82,8 @@ const handleSubmit = () => {
           <p>
             Quiz completed!
           </p>
-          <button onClick={() => setIsFinished(false)}>
+          <Results userAnswers={answersSelected.current}/>
+          <button onClick={ handleReset }>
             Restart
           </button>
           </>
