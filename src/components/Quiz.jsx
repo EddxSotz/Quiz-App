@@ -7,11 +7,13 @@ function Quiz() {
     const [userAnswer, setUserAnswer] = useState([]);
     const [shuffleAnswers, setShuffleAnswers] = useState(true);
     const [isFinished, setIsFinished] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     const answersSelected = useRef([]);
     const shuffledAnswer = useRef([]);
    const questionsLength = questions.length - 1;
 
-   const handleNext = () => {    
+   const handleNext = () => {
+    setIsChecked(false);
    if (currentQuestion < questionsLength) {
       setCurrentQuestion(currentQuestion + 1);
       answersSelected.current.push(userAnswer);
@@ -31,6 +33,7 @@ function Quiz() {
 
   const handleSaveAnswer = (e) => {
     setUserAnswer(e.target.value);
+    setIsChecked(true);
   }
 
 const handleSubmit = () => {
@@ -64,15 +67,17 @@ const handleReset = () => {
                       name='answer'
                       value={answer}                    
                       checked= {userAnswer === answer}
-                      onChange={handleSaveAnswer}                                                                                            
+                      onChange={handleSaveAnswer} 
+                      required                                                                                           
                   />
                   <label htmlFor='answer'>{answer}</label>                               
               </li>
             ))}
           </ul>
-          <button onClick={handleNext}>
+          <button onClick={handleNext} disabled={!isChecked}>
             Next
           </button>
+          {!isChecked && <p>Please select an answer</p>}
           <p>
             Question {currentQuestion + 1} of {questionsLength + 1}
           </p>
