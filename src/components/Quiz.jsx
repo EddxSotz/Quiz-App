@@ -1,4 +1,5 @@
 import questions from '../questions.js';
+import Results from './Results';
 import { useState, useRef, useEffect } from 'react';
 
 function Quiz() {
@@ -6,11 +7,13 @@ function Quiz() {
     const [userAnswer, setUserAnswer] = useState([]);
     const [shuffleAnswers, setShuffleAnswers] = useState(true);
     const [isFinished, setIsFinished] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
     const answersSelected = useRef([]);
     const shuffledAnswer = useRef([]);
    const questionsLength = questions.length - 1;
 
-   const handleNext = () => {    
+   const handleNext = () => {
+    setIsChecked(false);
    if (currentQuestion < questionsLength) {
       setCurrentQuestion(currentQuestion + 1);
       answersSelected.current.push(userAnswer);
@@ -30,18 +33,23 @@ function Quiz() {
 
   const handleSaveAnswer = (e) => {
     setUserAnswer(e.target.value);
+    setIsChecked(true);
   }
 
-const handleSubmit = () => {  
+const handleSubmit = () => {
   answersSelected.current.map( (answer, index) => {
     console.log(`Question ${index + 1}: ${answer}`);
     return answer;    
   })
+  setIsFinished(true); 
+}
+
+const handleReset = () => {
   setShuffleAnswers(true);
   setCurrentQuestion(0);
   setUserAnswer([]);
   answersSelected.current = [];
-  setIsFinished(true);
+  setIsFinished(false);
 }
   
   return (
@@ -59,15 +67,17 @@ const handleSubmit = () => {
                       name='answer'
                       value={answer}                    
                       checked= {userAnswer === answer}
-                      onChange={handleSaveAnswer}                                                                                            
+                      onChange={handleSaveAnswer} 
+                      required                                                                                           
                   />
                   <label htmlFor='answer'>{answer}</label>                               
               </li>
             ))}
           </ul>
-          <button onClick={handleNext}>
+          <button onClick={handleNext} disabled={!isChecked}>
             Next
           </button>
+          {!isChecked && <p>Please select an answer</p>}
           <p>
             Question {currentQuestion + 1} of {questionsLength + 1}
           </p>
@@ -77,7 +87,8 @@ const handleSubmit = () => {
           <p>
             Quiz completed!
           </p>
-          <button onClick={() => setIsFinished(false)}>
+          <Results userAnswers={answersSelected.current}/>
+          <button onClick={ handleReset }>
             Restart
           </button>
           </>
