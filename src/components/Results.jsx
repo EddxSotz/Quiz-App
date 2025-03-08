@@ -8,13 +8,13 @@ function Results({ userAnswers }) {
       <div>
         {questions.map((question, index) => (
           <div key={question.id}>
-            <h3>{question.text}</h3>            
+            <h3><span>#{index + 1 }: </span>{question.text}</h3>            
             <p>The Correct answer: {question.answers[0]}</p>   
             <p>Your answer: { userAnswers[index]}</p>
             {question.correctAnswer === userAnswers[index] ? (
-              <p>Correct!</p>
+              <p id="correct-answer">Correct!</p>
             ) : (
-              <p>Incorrect!</p>
+              <p id="incorrect-answer">Incorrect!</p>
             )}       
           </div>
         ))}
