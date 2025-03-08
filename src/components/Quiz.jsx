@@ -53,28 +53,27 @@ const handleReset = () => {
 }
   
   return (
-    <div className='quiz'>
-      <h1>Quiz</h1>
-      <div>
+    <div className='quiz'>      
+      <div id="quiz">
         { !isFinished ? (
           <>
           <h2>{questions[currentQuestion].text}</h2>
           <ul>
             {shuffledAnswer.current.map((answer, index) => (
-              <li key={index} className='answer'>
+              <li key={index} id="answers">
                   <input
                       type='radio'
                       name='answer'
-                      value={answer}                    
+                      value={answer}          
                       checked= {userAnswer === answer}
-                      onChange={handleSaveAnswer} 
-                      required                                                                                           
+                      id={answer}
+                      onChange={handleSaveAnswer}                                                                                                          
                   />
-                  <label htmlFor='answer'>{answer}</label>                               
+                  <label htmlFor={answer}>{answer}</label>                               
               </li>
             ))}
           </ul>
-          <button onClick={handleNext} disabled={!isChecked}>
+          <button onClick={handleNext} disabled={!isChecked} id='next-button'>
             Next
           </button>
           {!isChecked && <p>Please select an answer</p>}
@@ -88,7 +87,7 @@ const handleReset = () => {
             Quiz completed!
           </p>
           <Results userAnswers={answersSelected.current}/>
-          <button onClick={ handleReset }>
+          <button onClick={ handleReset } id='restart-button'>
             Restart
           </button>
           </>
